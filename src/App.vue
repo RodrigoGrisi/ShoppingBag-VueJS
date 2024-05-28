@@ -1,20 +1,23 @@
 
-<script setup>
-import { onMounted } from 'vue'
-import { useStore } from 'vuex'
+<script>
+import { mapState } from 'vuex'
 
-const store = useStore()
-
-onMounted(() => {
-  store.dispatch('loadProducts')
-})
+export default {
+  computed: mapState({
+    productsInBag: (state) => state.productsInBag
+  }),
+  mounted() {
+    this.$store.dispatch('loadProducts')
+  }
+}
 </script>
+
 
 <template>
   <div>
     <div id="nav">
       <router-link to="/">Home</router-link>
-      <router-link to="/basket">Shopping Bag </router-link>
+      <router-link to="/basket">Shopping Bag ({{ productsInBag.length }})</router-link>
     </div>
     <router-view />
   </div>

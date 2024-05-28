@@ -9,30 +9,24 @@
       >
         <div class="product-image" :style="{ backgroundImage: 'url(' + product.image + ')' }"></div>
         <h4>{{ product.title }}</h4>
-        <p>R$ {{ (product.price * 5).toFixed(2) }}</p>
+        <div class="upShowprice">
+          <p>R$ {{ (product.price * 5).toFixed(2) }}</p>
+        </div>
         <button v-if="!isInBag(product)" @click="addToBag(product)">add to bag</button>
         <button v-else class="remove" @click="this.$store.dispatch('removeFromBag', product.id)">
           Remove to Bag
         </button>
       </div>
     </div>
-    <div>{{ productsInBag.length }}</div>
   </div>
 </template>
-
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Home',
   computed: {
-    products() {
-      return this.$store.state.products
-    },
-    product() {
-      return this.$store.state.product
-    },
-    productsInBag() {
-      return this.$store.state.productsInBag
-    }
+    ...mapState(['products', 'productsInBag'])
   },
   methods: {
     addToBag(product) {
@@ -40,8 +34,11 @@ export default {
       this.$store.dispatch('addToBag', product)
     },
     isInBag(product) {
-      return this.productsInBag.find((item) => item.id == product.id)
+      return this.productsInBag.some((item) => item.id === product.id)
     }
+  },
+  mounted() {
+    this.$store.dispatch('loadProducts')
   }
 }
 </script>
