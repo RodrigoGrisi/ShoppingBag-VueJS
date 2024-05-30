@@ -1,6 +1,9 @@
 <template>
   <div class="basket">
     <div class="items">
+      <template v-if="!productsInBag.length">
+        <h3>Você não possui produtos em sua sacola...</h3>
+      </template>
       <div class="item" v-for="(p, idx) in productsInBag" :key="idx">
         <div class="photo">
           <img :src="p.image" alt="foto do produto" />
@@ -10,18 +13,23 @@
           <p class="truncate">{{ p.description }}</p>
         </div>
         <div class="quantityProduct">
-          <button class="quantity">+</button>
+          <!-- AUMENTAR E DIMINUIR QUANTIDADE -->
+          <button class="quantity" @click="p.quantity++">+</button>
           <div>Quantiade: {{ p.quantity }}</div>
-          <button class="quantity">-</button>
+
+          <button class="quantity" @click="p.quantity--" :disabled="p.quantity <= 1">-</button>
           <div class="price">
+            <!-- REMOVER ITEM DO CARRINHO -->
             <div class="remove" @click="removeFromBag(p.id)">Remove Item</div>
-            R$ <span class="amount">{{ (p.price * 5).toFixed(2) }}</span>
+
+            <!-- VALOR DO PRODUTO  -->
+            R$ <span class="amount">{{ (p.price * p.quantity).toFixed(2) }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="grand-total">
-      Total: R$ {{ grandTotal.toFixed(2) }}
+      Total: R$ {{ orderTotal(productsInBag) }}
       <button class="buttonPay">Pagar</button>
     </div>
   </div>
@@ -42,6 +50,16 @@ export default {
   methods: {
     removeFromBag(productId) {
       this.$store.dispatch('removeFromBag', productId)
+    },
+
+    orderTotal() {
+      let total = 0
+
+      this.productsInBag.forEach((item) => {
+        total += item.price * item.quantity
+      })
+
+      return total.toFixed(2)
     }
   }
 }
@@ -159,8 +177,9 @@ export default {
   }
 
   button.quantity:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: green;
   }
 
   button.quantity:focus {

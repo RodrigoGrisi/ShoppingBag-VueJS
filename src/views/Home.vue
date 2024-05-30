@@ -1,5 +1,20 @@
 <template>
   <div class="home">
+    <div class="grid-gallery">
+      <div class="grid-single">
+        <img
+          src="https://images.pexels.com/photos/2586073/pexels-photo-2586073.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        />
+      </div>
+      <div class="grid-single">
+        <img src="https://images.pexels.com/photos/1666779/pexels-photo-1666779.jpeg" />
+      </div>
+      <div class="grid-single">
+        <img
+          src="https://images.pexels.com/photos/1680172/pexels-photo-1680172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        />
+      </div>
+    </div>
     <div class="products">
       <div
         v-for="(product, index) in products"
@@ -20,6 +35,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { mapState } from 'vuex'
 
@@ -112,6 +128,26 @@ export default {
           text-decoration: underline;
         }
       }
+    }
+  }
+  .grid-gallery {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+
+    .grid-single {
+      display: flex;
+      margin: 2px;
+      height: 200px;
+      width: 450px;
+      height: 180px;
+    }
+
+    .grid-single img {
+      border-radius: 10px;
+      width: 100%;
+      object-fit: cover;
     }
   }
 }
